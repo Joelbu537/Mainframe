@@ -336,7 +336,6 @@ class Program
     static string CreateHash(string pwd, string path, string salt)
     {
         string[] userdata = File.ReadAllLines(path);
-        Thread.Sleep(1000);
         Console.Clear();
         if (debug)
         {
@@ -345,59 +344,7 @@ class Program
             Console.WriteLine("Combined: " + salt + pwd);
         }
         pwd = salt + pwd;
-        byte[] bytes = Encoding.UTF8.GetBytes(pwd);
-        string hexString = BitConverter.ToString(bytes).Replace("-", string.Empty);
-        if (debug)
-        {
-            Console.WriteLine("Combined HEX: " + hexString);
-        }
-        if (hexString.Length > 30)
-        {
-            Thread.Sleep(1000);
-            hexString = hexString.Substring(0, 30);
-        }
-        Thread.Sleep(800);
-        string hexValueString = Convert.ToString(hexString);
-        int max_length = 30;
-        if (hexValueString.Length > 30)
-        {
-            max_length = 30;
-        }
-        else
-        {
-            max_length = hexValueString.Length;
-        }
-        for (int i = 0; i < max_length; i++)
-        {
-            Thread.Sleep(30);
-            int number = Convert.ToInt32(hexValueString[i]);
-
-            try
-            {
-                number2 = Convert.ToInt32(hexValueString[i + 1]);
-            }
-            catch (Exception)
-            {
-
-            }
-            pwd_array[i] = number * number2;
-        }
-        if (debug)
-        {
-            Console.Write("Result: ");
-            for (int i = 0; i < pwd_array.Length; i++)
-            {
-                Console.Write(pwd_array[i]);
-            }
-            Console.WriteLine();
-            Console.ReadKey();
-            Thread.Sleep(750);
-        }
-        string assembly_pwd = "";
-        for (int i = 0; i < pwd_array.Length; i++)
-        {
-            assembly_pwd += Convert.ToString(pwd_array[i]);
-        }
+        string assembly_pwd = CreateMD5(pwd);
         return assembly_pwd;
     }
     static string CheckPassword(string EnterText)
